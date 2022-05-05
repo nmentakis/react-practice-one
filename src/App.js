@@ -1,25 +1,39 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import TodoCreator from './components/TodoCreator';
+import Items from './components/Items';
 
-function App() {
+
+
+const App = () => {
+  const [items, setItems] = useState([]);
+
+
+  //set up a get request to get all todos
+  useEffect( () => {
+    // fetch("http://localhost:3001/api/items")
+    getAllItems();
+  }, []);
+
+
+  const getAllItems = () => {
+    axios.get("http://localhost:3001/api/items")
+      .then(res =>{
+        setItems(res.data);
+      });
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <TodoCreator getAllItems={getAllItems}/>
+      <Items items={items} getAllItems={getAllItems}/>
     </div>
   );
 }
+
+
+
 
 export default App;
